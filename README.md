@@ -21,3 +21,18 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (v18.0.0 or higher)
 - npm, yarn, or pnpm
+
+## Development
+
+To run the project locally in development mode:
+
+```bash
+npm run dev
+```
+
+To build and run the production bundle:
+
+```bash
+npm run build
+npm run start
+```
