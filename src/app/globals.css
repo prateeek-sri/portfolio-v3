@@ -1,6 +1,8 @@
 @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../../components/**/*.{js,ts,jsx,tsx}";
 @source "../../src/**/*.{js,ts,jsx,tsx}";
 

@@ -19,40 +19,40 @@ const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; inver
 
   return (
     <span
-      className="relative inline-flex items-center gap-1.5 mx-1 cursor-pointer group select-none align-middle"
+      className="relative inline-flex items-center gap-1 mx-1 cursor-pointer group select-none align-middle"
       onMouseMove={handleMouseMove}
     >
-      {/* The magnetic expanding circle background that tracks the cursor */}
+      {/* The magnetic expanding circle background that tracks the cursor with mix-blend-difference */}
       <span
-        className="absolute rounded-full bg-black dark:bg-white pointer-events-none transition-transform duration-300 ease-out scale-0 group-hover:scale-100 -translate-x-1/2 -translate-y-1/2 -z-10"
+        className="absolute rounded-full bg-white pointer-events-none transition-transform duration-300 ease-out scale-0 group-hover:scale-100 -translate-x-1/2 -translate-y-1/2 z-20 mix-blend-difference"
         style={{
           left: `${mousePos.x}px`,
           top: `${mousePos.y}px`,
-          width: '36px',
-          height: '36px',
+          width: '20px',
+          height: '20px',
         }}
       />
 
       {/* Icon/Flag Container */}
       {icon && (
-        <span className="relative z-10 w-5 h-5 flex items-center justify-center shrink-0">
+        <span className="relative z-30 w-5.5 h-5 flex items-center justify-center shrink-0">
           <img
             src={icon}
             alt=""
-            className={`w-[18px] h-[13px] object-cover rounded-[3px] shadow-sm transition-all duration-300 ${
+            className={`w-[22px] h-[15px] object-cover rounded-[3px] shadow-sm transition-all duration-300 ${
               invertOnHover ? "group-hover:invert dark:group-hover:invert-0" : ""
             }`}
           />
         </span>
       )}
       {emoji && (
-        <span className="text-sm leading-none z-10">{emoji}</span>
+        <span className="text-sm leading-none z-30">{emoji}</span>
       )}
 
       {/* Text with animated underline (starts left, goes right) */}
-      <span className="relative text-text-primary group-hover:text-white dark:group-hover:text-black font-semibold pb-0.5 ml-0.5 transition-colors duration-300">
+      <span className={`relative text-text-primary font-semibold pb-0.5 transition-colors duration-300 z-10 ${icon || emoji ? "ml-0.5" : ""}`}>
         {text}
-        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary group-hover:bg-white dark:group-hover:bg-black transition-colors duration-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
       </span>
     </span>
   );
@@ -83,13 +83,7 @@ const renderHighlightedText = (text: string, highlights: string[]) => {
     }
     if (highlights.includes(part)) {
       return (
-        <span
-          key={i}
-          className="relative inline text-text-primary cursor-default font-medium pb-0.5 group/highlight"
-        >
-          {part}
-          <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary scale-x-0 group-hover/highlight:scale-x-100 transition-transform duration-300 ease-out origin-left" />
-        </span>
+        <InlineBadge key={i} text={part} />
       );
     }
     return <React.Fragment key={i}>{part}</React.Fragment>;
