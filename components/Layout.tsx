@@ -1,0 +1,51 @@
+import React from 'react';
+import { cn } from '../lib/utils';
+import Link from 'next/link';
+
+interface LayoutProps {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}
+
+// Main container restricting max width and handling padding
+export const Container: React.FC<LayoutProps> = ({ children, className = "", id }) => {
+  return (
+    <div id={id} className={cn("w-full max-w-3xl mx-auto px-3 sm:px-6 lg:px-8", className)}>
+      {children}
+    </div>
+  );
+};
+
+// Section wrapper with vertical rhythm (margin bottom)
+export const Section: React.FC<LayoutProps> = ({ children, className = "", id }) => {
+  return (
+    <section id={id} className={cn("flex flex-col gap-6", className)}>
+      {children}
+    </section>
+  );
+};
+
+// Section Header with Title and Subtitle
+interface SectionHeaderProps {
+  title: string;
+  subtitle?: string;
+  count?: number;
+  href?: string;
+}
+
+export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle, count, href }) => {
+  return (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-xl font-medium text-text-primary">
+        <Link href={href || `/${title.toLowerCase()}`} >
+        <span className="underline decoration-wavy underline-offset-4 decoration-1 decoration-highlight">
+          {title}
+        </span>
+        </Link>
+        {count !== undefined && <span className="text-sm align-top ml-1 text-text-secondary">({count})</span>}
+      </h2>
+      {subtitle && <p className="text-sm text-text-secondary">{subtitle}</p>}
+    </div>
+  );
+};

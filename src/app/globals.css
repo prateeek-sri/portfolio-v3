@@ -1,0 +1,111 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
+@import "tailwindcss";
+
+@source "../../components/**/*.{js,ts,jsx,tsx}";
+@source "../../src/**/*.{js,ts,jsx,tsx}";
+
+
+@theme {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-surface: rgb(var(--surface));
+  --color-highlight: rgb(var(--highlight));
+
+  --color-text-primary: rgb(var(--text-primary));
+  --color-text-secondary: rgb(var(--text-secondary));
+  --color-text-muted: rgb(var(--text-muted));
+
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--border));
+  --color-ring: rgb(var(--highlight));
+
+  --color-primary: rgb(var(--foreground));
+  --color-primary-foreground: rgb(var(--background));
+
+  --color-secondary: rgb(var(--surface));
+  --color-secondary-foreground: rgb(var(--foreground));
+
+  --color-muted: rgb(var(--surface));
+  --color-muted-foreground: rgb(var(--text-secondary));
+
+  --color-accent: rgb(var(--surface));
+  --color-accent-foreground: rgb(var(--foreground));
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #f5f5f5;
+
+  --color-card: rgb(var(--surface));
+  --color-card-foreground: rgb(var(--foreground));
+
+  --color-popover: rgb(var(--surface));
+  --color-popover-foreground: rgb(var(--foreground));
+
+  --font-sans: "Satoshi", "Inter", system-ui, sans-serif;
+  --font-display: "Satoshi", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-signature: cursive;
+
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+}
+
+:root {
+  /* Light Mode Defaults */
+  --background: 228 223 201; /* #E4DFC9 */
+  --foreground: 50 52 56;    /* #323438 */
+  --surface: 241 239 222;    /* Slightly lighter beige for cards/surfaces */
+  --border: 215 209 177;     /* Subtle darker beige for borders */
+  --text-primary: 50 52 56;  /* #323438 */
+  --text-secondary: 82 82 82; /* Keep existing secondary gray */
+  --text-muted: 163 163 163;
+  --highlight: 239 93 96;
+}
+
+:root.dark {
+  /* Dark Mode Overrides */
+  --background: 10 10 10;
+  --foreground: 245 245 245;
+  --surface: 23 23 23;
+  --border: 38 38 38;
+  --text-primary: 245 245 245;
+  --text-secondary: 163 163 163;
+  --text-muted: 82 82 82;
+  --highlight: 239 93 96;
+}
+
+body {
+  background-color: rgb(var(--background));
+  color: rgb(var(--text-primary));
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--border));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--text-muted));
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
