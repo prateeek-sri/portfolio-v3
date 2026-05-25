@@ -21,7 +21,7 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (v18.0.0 or higher)
 - npm, yarn, or pnpm
-
+Hey, I'm Prateek Srivastav, a Fullstack Developer & UI/UX Designer working remotely from 🇮🇳 India.
 ## Development
 
 To run the project locally in development mode:
