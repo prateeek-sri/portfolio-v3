@@ -6,33 +6,53 @@ import { ArrowUpRightIcon, VolumeIcon } from './Icons';
 import { CONFIG } from '../src/config';
 import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
-// Dynamic Inline Badge with a minimal design and expanding circle hover behind the icon
+// Dynamic Inline Badge with a magnetic circle cursor hover effect that tracks mouse position
 const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; invertOnHover?: boolean }> = ({ text, icon, emoji, invertOnHover }) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y });
+  };
+
   return (
-    <span className="relative inline-flex items-center gap-1 mx-1 cursor-pointer group select-none align-middle">
+    <span
+      className="relative inline-flex items-center gap-1.5 mx-1 cursor-pointer group select-none align-middle"
+      onMouseMove={handleMouseMove}
+    >
+      {/* The magnetic expanding circle background that tracks the cursor */}
+      <span
+        className="absolute rounded-full bg-black dark:bg-white pointer-events-none transition-transform duration-300 ease-out scale-0 group-hover:scale-100 -translate-x-1/2 -translate-y-1/2 -z-10"
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`,
+          width: '36px',
+          height: '36px',
+        }}
+      />
+
       {/* Icon/Flag Container */}
-      <span className="relative inline-flex items-center justify-center w-5 h-5 shrink-0">
-        {/* The expanding circle cursor behind the icon */}
-        <span className="absolute w-7 h-7 bg-foreground dark:bg-white rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]" />
-        
-        {icon && (
+      {icon && (
+        <span className="relative z-10 w-5 h-5 flex items-center justify-center shrink-0">
           <img
             src={icon}
             alt=""
-            className={`w-[18px] h-[18px] object-contain rounded-[3px] z-10 transition-all duration-300 ${
+            className={`w-[18px] h-[13px] object-cover rounded-[3px] shadow-sm transition-all duration-300 ${
               invertOnHover ? "group-hover:invert dark:group-hover:invert-0" : ""
             }`}
           />
-        )}
-        {emoji && (
-          <span className="text-sm leading-none z-10">{emoji}</span>
-        )}
-      </span>
-      
+        </span>
+      )}
+      {emoji && (
+        <span className="text-sm leading-none z-10">{emoji}</span>
+      )}
+
       {/* Text with animated underline (starts left, goes right) */}
-      <span className="relative text-text-primary font-semibold text-sm pb-0.5 ml-0.5">
+      <span className="relative text-text-primary group-hover:text-white dark:group-hover:text-black font-semibold pb-0.5 ml-0.5 transition-colors duration-300">
         {text}
-        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary group-hover:bg-white dark:group-hover:bg-black transition-colors duration-300 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
       </span>
     </span>
   );
