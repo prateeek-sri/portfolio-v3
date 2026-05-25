@@ -79,7 +79,7 @@ export const CONFIG: PortfolioConfig = {
         "ui/ux designer"
     ],
     bio: [
-        "Hi, I'm a passionate developer focused on building clean, performant, and user-centric web applications working remotely from India.",
+        "Hi I'm a passionate developer focused on building clean, performant and user-centric web applications working remotely from India.",
         "I’m exploring how to turn ideas into simple, functional projects using Next.js while learning the craft of good design and clean code.",
         "My mission is to build cool things and keep my caffeine intake at socially acceptable levels.",
     ],

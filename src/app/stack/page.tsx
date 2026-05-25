@@ -135,6 +135,33 @@ const StackPage = () => {
       bg: "bg-emerald-50/20 dark:bg-emerald-950/20",
       text: "text-emerald-600 dark:text-emerald-400",
     },
+    {
+      title: "Python",
+      id: 12,
+      main: "/icons/Python.svg",
+      desc: "A versatile, object-oriented language used for building web, mobile, and enterprise apps., secure, and platform-independent, making it ideal for scalable, cross-platform development.",
+      tag: "code",
+      bg: "bg-yellow-50/20 dark:bg-yellow-950/20",
+      text: "text-yellow-600 dark:text-yellow-400",
+    },
+    {
+      title: "VS Code",
+      id: 13,
+      main: "/icons/vscode-original.svg",
+      desc: "A code editor that is used by developers to write code, it is lightweight, flexible, and has a lot of extensions that can be used to enhance the development experience.",
+      tag: "platform",
+      bg: "bg-blue-50/20 dark:bg-blue-950/30",
+      text: "text-blue-600 dark:text-blue-400",
+    },
+    {
+      title: "Postman",
+      id: 14,
+      main: "/icons/Postman.svg",
+      desc: "A collaborative API platform for building, testing, and designing APIs.",
+      tag: "platform",
+      bg: "bg-orange-50/20 dark:bg-orange-950/20",
+      text: "text-orange-600 dark:text-orange-400",
+    },
   ];
 
   const [idNumber, setIdNumber] = useState(0);

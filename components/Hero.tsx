@@ -35,11 +35,15 @@ const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; inver
 
       {/* Icon/Flag Container */}
       {icon && (
-        <span className="relative z-30 w-5.5 h-5 flex items-center justify-center shrink-0">
+        <span className={`relative z-30 flex items-center justify-center shrink-0 ${text === "Next.js" ? "w-[20px] h-[20px]" : "w-5 h-5"}`}>
           <img
             src={icon}
             alt=""
-            className={`w-[22px] h-[15px] object-cover rounded-[3px] shadow-sm transition-all duration-300 ${
+            className={`object-cover shadow-sm transition-all duration-300 ${
+              text === "Next.js"
+                ? "w-[20px] h-[20px] rounded-full"
+                : "w-[20px] h-[15px] rounded-[3px]"
+            } ${
               invertOnHover ? "group-hover:invert dark:group-hover:invert-0" : ""
             }`}
           />
@@ -190,9 +194,9 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <Section id="about">
+    <Section id="about" className="bg-background">
       <Container>
-        <div className="flex flex-col gap-6 relative z-10">
+        <div className="flex flex-col gap-6 relative z-10 bg-background">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">
               <h1 className="text-5xl md:text-6xl font-display font-medium text-text-primary tracking-tight">
