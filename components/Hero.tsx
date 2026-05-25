@@ -6,25 +6,68 @@ import { ArrowUpRightIcon, VolumeIcon } from './Icons';
 import { CONFIG } from '../src/config';
 import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
-// Utility: wrap matching highlight words in a styled <span>
+// Dynamic Inline Badge with a smooth expanding circle hover effect
+const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string }> = ({ text, icon, emoji }) => {
+  return (
+    <span className="relative inline-flex items-center gap-1.5 px-2 py-0.5 mx-1 rounded bg-surface/80 border border-border/40 cursor-pointer group overflow-hidden transition-all duration-300 select-none align-middle">
+      {/* The expanding circle background */}
+      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-foreground dark:bg-white rounded-full scale-0 group-hover:scale-[18] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] -z-10" />
+      
+      {/* Icon or Emoji */}
+      {icon && (
+        <img
+          src={icon}
+          alt=""
+          className="w-3.5 h-3.5 object-contain group-hover:invert dark:group-hover:invert-0 transition-all duration-300"
+        />
+      )}
+      {emoji && (
+        <span className="text-sm leading-none">{emoji}</span>
+      )}
+      
+      {/* Text */}
+      <span className="font-semibold text-text-primary group-hover:text-background transition-colors duration-300 text-sm">
+        {text}
+      </span>
+    </span>
+  );
+};
+
+// Utility: wrap matching highlight words in styled elements or badges
 const renderHighlightedText = (text: string, highlights: string[]) => {
-  // Build a regex that matches any of the highlight phrases
-  const escaped = highlights.map(h => h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const specialBadges = ["India", "Next.js"];
+  const allMatches = [...highlights, ...specialBadges];
+  
+  // Sort by length descending to match longer terms first
+  allMatches.sort((a, b) => b.length - a.length);
+  
+  const escaped = allMatches.map(h => h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   const regex = new RegExp(`(${escaped.join('|')})`, 'g');
   const parts = text.split(regex);
 
-  return parts.map((part, i) =>
-    highlights.includes(part) ? (
-      <span
-        key={i}
-        className="text-text-primary underline decoration-wavy underline-offset-4 decoration-1 decoration-highlight cursor-default"
-      >
-        {part}
-      </span>
-    ) : (
-      <React.Fragment key={i}>{part}</React.Fragment>
-    )
-  );
+  return parts.map((part, i) => {
+    if (part === "India") {
+      return (
+        <InlineBadge key={i} text="India" emoji="🇮🇳" />
+      );
+    }
+    if (part === "Next.js") {
+      return (
+        <InlineBadge key={i} text="Next.js" icon="/icons/next.js-logo.svg" />
+      );
+    }
+    if (highlights.includes(part)) {
+      return (
+        <span
+          key={i}
+          className="text-text-primary underline decoration-transparent hover:decoration-text-primary transition-all duration-300 underline-offset-4 cursor-default font-medium"
+        >
+          {part}
+        </span>
+      );
+    }
+    return <React.Fragment key={i}>{part}</React.Fragment>;
+  });
 };
 
 const Hero: React.FC = () => {
