@@ -6,28 +6,33 @@ import { ArrowUpRightIcon, VolumeIcon } from './Icons';
 import { CONFIG } from '../src/config';
 import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
-// Dynamic Inline Badge with a smooth expanding circle hover effect
-const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string }> = ({ text, icon, emoji }) => {
+// Dynamic Inline Badge with a minimal design and expanding circle hover behind the icon
+const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; invertOnHover?: boolean }> = ({ text, icon, emoji, invertOnHover }) => {
   return (
-    <span className="relative inline-flex items-center gap-1.5 px-2 py-0.5 mx-1 rounded bg-surface/80 border border-border/40 cursor-pointer group overflow-hidden transition-all duration-300 select-none align-middle">
-      {/* The expanding circle background */}
-      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-foreground dark:bg-white rounded-full scale-0 group-hover:scale-[18] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] -z-10" />
+    <span className="relative inline-flex items-center gap-1 mx-1 cursor-pointer group select-none align-middle">
+      {/* Icon/Flag Container */}
+      <span className="relative inline-flex items-center justify-center w-5 h-5 shrink-0">
+        {/* The expanding circle cursor behind the icon */}
+        <span className="absolute w-7 h-7 bg-foreground dark:bg-white rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]" />
+        
+        {icon && (
+          <img
+            src={icon}
+            alt=""
+            className={`w-[18px] h-[18px] object-contain rounded-[3px] z-10 transition-all duration-300 ${
+              invertOnHover ? "group-hover:invert dark:group-hover:invert-0" : ""
+            }`}
+          />
+        )}
+        {emoji && (
+          <span className="text-sm leading-none z-10">{emoji}</span>
+        )}
+      </span>
       
-      {/* Icon or Emoji */}
-      {icon && (
-        <img
-          src={icon}
-          alt=""
-          className="w-3.5 h-3.5 object-contain group-hover:invert dark:group-hover:invert-0 transition-all duration-300"
-        />
-      )}
-      {emoji && (
-        <span className="text-sm leading-none">{emoji}</span>
-      )}
-      
-      {/* Text */}
-      <span className="font-semibold text-text-primary group-hover:text-background transition-colors duration-300 text-sm">
+      {/* Text with animated underline (starts left, goes right) */}
+      <span className="relative text-text-primary font-semibold text-sm pb-0.5 ml-0.5">
         {text}
+        <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
       </span>
     </span>
   );
@@ -48,21 +53,22 @@ const renderHighlightedText = (text: string, highlights: string[]) => {
   return parts.map((part, i) => {
     if (part === "India") {
       return (
-        <InlineBadge key={i} text="India" emoji="🇮🇳" />
+        <InlineBadge key={i} text="India" icon="/icons/india.svg" invertOnHover={false} />
       );
     }
     if (part === "Next.js") {
       return (
-        <InlineBadge key={i} text="Next.js" icon="/icons/next.js-logo.svg" />
+        <InlineBadge key={i} text="Next.js" icon="/icons/next.js-logo.svg" invertOnHover={true} />
       );
     }
     if (highlights.includes(part)) {
       return (
         <span
           key={i}
-          className="text-text-primary underline decoration-transparent hover:decoration-text-primary transition-all duration-300 underline-offset-4 cursor-default font-medium"
+          className="relative inline text-text-primary cursor-default font-medium pb-0.5 group/highlight"
         >
           {part}
+          <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-text-primary scale-x-0 group-hover/highlight:scale-x-100 transition-transform duration-300 ease-out origin-left" />
         </span>
       );
     }
