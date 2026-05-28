@@ -194,9 +194,9 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <Section id="about" className="bg-background">
+    <Section id="about">
       <Container>
-        <div className="flex flex-col gap-6 relative z-10 bg-background">
+        <div className="flex flex-col gap-6 relative z-10">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">
               <h1 className="text-5xl md:text-6xl font-display font-medium text-text-primary tracking-tight">

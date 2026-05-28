@@ -74,6 +74,10 @@
   --highlight: 239 93 96;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--text-primary));

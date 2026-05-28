@@ -1,6 +1,8 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
+import { ArrowUpRight, Star } from 'lucide-react';
 import { Section, Container, SectionHeader } from './Layout';
 import { CONFIG } from '../src/config';
 import { GithubIcon } from './Icons';
@@ -70,9 +72,9 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
     <div
       onClick={handleRowClick}
       onMouseMove={handleMouseMove}
-      className="group relative flex items-center justify-between py-6 border-b border-border/30 hover:border-border/60 transition-all duration-200 cursor-pointer"
+      className="group relative flex flex-col md:flex-row md:items-center justify-between py-6 gap-4 md:gap-0 border-b border-border/30 hover:border-border/60 transition-all duration-300 cursor-pointer group-hover/list:opacity-40 group-hover/list:blur-[1.5px] hover:!opacity-100 hover:!blur-none"
     >
-      {/* Floating pure CSS Preview Tooltip - 100% GPU accelerated & lag-free */}
+      {/* Floating pure CSS Preview Tooltip - 100% GPU accelerated & lag-free on desktop */}
       <div
         ref={tooltipRef}
         className="hidden md:block absolute pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 left-0 top-0 will-change-transform"
@@ -85,8 +87,17 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
         </div>
       </div>
 
+      {/* Mobile-only static preview image (no hover effects) */}
+      <div className="block md:hidden w-full overflow-hidden rounded-lg border border-border/40 shadow-md">
+        <img
+          src={project.image}
+          alt={project.name}
+          className="w-full aspect-video object-cover"
+        />
+      </div>
+
       {/* Left side: Project details */}
-      <div className="flex flex-col gap-1 items-start text-left transition-transform duration-300 ease-out group-hover:translate-x-2.5">
+      <div className="flex flex-col gap-1 items-start text-left md:transition-transform md:duration-300 md:ease-out md:group-hover:translate-x-2.5 w-full md:w-auto">
         <div className="flex items-center gap-2">
           <h3 className="text-base font-semibold text-text-primary group-hover:text-highlight transition-colors duration-200">
             {project.name}
@@ -123,7 +134,7 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
           )}
         </div>
         
-        <p className="text-sm text-text-secondary pr-4 line-clamp-1">{project.description}</p>
+        <p className="text-sm text-text-secondary pr-4 line-clamp-2 md:line-clamp-1">{project.description}</p>
         
         <span className="text-xs text-text-muted mt-1 font-medium font-sans">
           {project.year}
@@ -131,7 +142,7 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
       </div>
 
       {/* Right side: Color-spreading stacked tech icons */}
-      <div className="flex items-center space-x-1 md:-space-x-1.5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:space-x-1 select-none shrink-0 pl-4">
+      <div className="flex items-center space-x-1 md:-space-x-1.5 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:space-x-1 select-none shrink-0 md:pl-4">
         {project.tags.map((tag, i) => {
           const iconSrc = TECH_ICONS[tag.toLowerCase()];
           if (!iconSrc) return null;
@@ -157,7 +168,7 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
 };
 
 const Projects: React.FC = () => {
-  const { projects } = CONFIG;
+  const { projects, footer } = CONFIG;
 
   return (
     <Section id="projects">
@@ -168,10 +179,19 @@ const Projects: React.FC = () => {
           count={projects.length}
           subtitle="Some design projects I have crafted"
         />
-        <div className="flex flex-col mt-2">
+        <div className="flex flex-col mt-2 group/list">
           {projects.slice(0, 2).map((p, i) => (
             <ProjectRow key={i} project={p} />
           ))}
+        </div>
+        <div className="flex justify-center mt-8">
+          <Link
+            href="/work"
+            className="flex items-center gap-2 px-4 py-2 w-fit rounded-full border border-border bg-surface text-text-secondary hover:text-text-primary hover:border-text-muted/50 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group cursor-pointer"
+          >
+            <span className="text-xs sm:text-sm font-medium">Show more projects</span>
+            <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-text-primary transition-all duration-500 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
         </div>
       </Container>
     </Section>

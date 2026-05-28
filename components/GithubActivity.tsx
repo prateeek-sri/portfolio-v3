@@ -140,31 +140,6 @@ const GithubActivity: React.FC = () => {
     }
   };
 
-  const renderMonthLabels = () => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-
-    return (
-      <div className="flex justify-between text-[10px] text-text-muted px-2 select-none mb-2">
-        {months.map((m) => (
-          <span key={m}>{m}</span>
-        ))}
-      </div>
-    );
-  };
-
   if (error) {
     return (
       <Section>
@@ -243,33 +218,76 @@ const GithubActivity: React.FC = () => {
             </div>
           )}
 
-          {renderMonthLabels()}
+          <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
+            <div className="min-w-max flex flex-col gap-1">
+              {/* Scrollable Month labels aligned with contribution grid */}
+              <div className="flex gap-[3px] text-[10px] text-text-muted select-none h-5 relative">
+                {weeks.map((week, wIndex) => {
+                  const label = (() => {
+                    const currentWeek = weeks[wIndex];
+                    if (!currentWeek) return null;
+                    const firstDay = currentWeek.find(day => day !== null);
+                    if (!firstDay) return null;
 
-          <div className="flex gap-[3px] overflow-x-auto pb-2 scrollbar-hide">
-            {weeks.map((week, wIndex) => (
-              <div key={wIndex} className="flex flex-col gap-[3px]">
-                {week.map((day, dIndex) => {
-                  if (!day) {
-                    return (
-                      <div
-                        key={`pad-${dIndex}`}
-                        className="w-[10px] h-[10px]"
-                      />
-                    );
-                  }
+                    const date = new Date(firstDay.date);
+                    const month = date.getMonth();
+
+                    if (wIndex === 0) {
+                      return date.toLocaleString('en-US', { month: 'short' });
+                    }
+
+                    const prevWeek = weeks[wIndex - 1];
+                    const prevFirstDay = prevWeek ? prevWeek.find(day => day !== null) : null;
+                    if (prevFirstDay) {
+                      const prevDate = new Date(prevFirstDay.date);
+                      if (prevDate.getMonth() !== month) {
+                        return date.toLocaleString('en-US', { month: 'short' });
+                      }
+                    }
+
+                    return null;
+                  })();
 
                   return (
-                    <div
-                      key={day.date}
-                      className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-200 hover:ring-1 hover:ring-white/50 ${getColorClass(
-                        day.level
-                      )}`}
-                      title={`${day.date}: ${day.count} contributions`}
-                    />
+                    <div key={wIndex} className="w-[10px] relative">
+                      {label && (
+                        <span className="absolute left-0 bottom-0.5 whitespace-nowrap font-medium">
+                          {label}
+                        </span>
+                      )}
+                    </div>
                   );
                 })}
               </div>
-            ))}
+
+              {/* Scrollable Contribution Calendar Grid */}
+              <div className="flex gap-[3px]">
+                {weeks.map((week, wIndex) => (
+                  <div key={wIndex} className="flex flex-col gap-[3px]">
+                    {week.map((day, dIndex) => {
+                      if (!day) {
+                        return (
+                          <div
+                            key={`pad-${dIndex}`}
+                            className="w-[10px] h-[10px]"
+                          />
+                        );
+                      }
+
+                      return (
+                        <div
+                          key={day.date}
+                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-200 hover:ring-1 hover:ring-white/50 ${getColorClass(
+                            day.level
+                          )}`}
+                          title={`${day.date}: ${day.count} contributions`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center justify-between text-xs text-text-muted mt-2">

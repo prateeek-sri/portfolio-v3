@@ -1,6 +1,9 @@
+"use client";
+
 import React from 'react';
 import { cn } from '../lib/utils';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,12 +20,22 @@ export const Container: React.FC<LayoutProps> = ({ children, className = "", id 
   );
 };
 
-// Section wrapper with vertical rhythm (margin bottom)
+// Section wrapper with vertical rhythm (margin bottom) and scroll blur-reveal
 export const Section: React.FC<LayoutProps> = ({ children, className = "", id }) => {
   return (
-    <section id={id} className={cn("flex flex-col gap-6", className)}>
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-12% 0px -12% 0px" }}
+      transition={{
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1] // Custom ultra-premium ease-out-expo
+      }}
+      className={cn("flex flex-col gap-6", className)}
+    >
       {children}
-    </section>
+    </motion.section>
   );
 };
 
