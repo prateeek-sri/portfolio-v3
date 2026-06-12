@@ -4,16 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { Section, Container, SectionHeader } from './Layout';
-import { 
-  Music, 
-  MapPin, 
-  Monitor, 
-  Zap, 
-  GitCommit, 
-  ArrowUpRight, 
-  Instagram, 
-  BookOpen, 
-  PenTool, 
+import {
+  Music,
+  MapPin,
+  Monitor,
+  Zap,
+  GitCommit,
+  ArrowUpRight,
+  Instagram,
+  BookOpen,
+  PenTool,
   Loader2,
   AlertCircle,
   FileText,
@@ -127,7 +127,7 @@ const InstagramStatus = () => {
     const checkStatus = () => {
       const now = new Date();
       // Get IST time exactly
-      const istTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+      const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
       const h = istTime.getHours();
       const m = istTime.getMinutes();
       const timeVal = h + m / 60;
@@ -176,7 +176,7 @@ const LatestCommitCard = () => {
         const response = await fetch(`https://api.github.com/repos/${username}/portfolio-v3/commits`);
         if (!response.ok) throw new Error('Failed to load commit');
         const commits = await response.json();
-        
+
         if (commits && commits.length > 0) {
           const commitData = commits[0];
           setData({
@@ -260,7 +260,7 @@ const SpotifyCard = () => {
         const res = await fetch('/api/spotify');
         const json = await res.json();
         setData(json);
-      } catch (error) {}
+      } catch (error) { }
     };
 
     fetchSpotify();
@@ -286,10 +286,10 @@ const SpotifyCard = () => {
       <div className="flex items-center gap-3">
         {(data.isPlaying || data.title) && data.albumImageUrl && (
           <div className="relative shrink-0">
-            <img 
-              src={data.albumImageUrl} 
-              alt="album" 
-              className={cn("w-10 h-10 rounded-full", data.isPlaying && "animate-[spin_6s_linear_infinite]")} 
+            <img
+              src={data.albumImageUrl}
+              alt="album"
+              className={cn("w-10 h-10 rounded-full", data.isPlaying && "animate-[spin_6s_linear_infinite]")}
             />
             <div className="absolute inset-0 m-auto w-2 h-2 bg-background rounded-full border border-border/20" />
           </div>
@@ -483,13 +483,13 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
 
   useEffect(() => {
     if (gameState !== 'playing') return;
-    
+
     // Drop fruits faster: every 500ms
     const interval = setInterval(() => {
       setFruits(prev => {
         // Keep max 20 items on screen to prevent lag
         if (prev.length > 20) return prev.slice(1);
-        
+
         // Random chance for a bomb (15% chance)
         const isBombRoll = Math.random() < 0.15;
         const availableTypes = FRUIT_TYPES.filter(f => isBombRoll ? f.isBomb : !f.isBomb);
@@ -519,22 +519,91 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
     return () => clearInterval(cleanupInterval);
   }, []);
 
+  const playSound = (type: 'slice' | 'bomb' | 'win' | 'lose') => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+
+      if (type === 'slice') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.5, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'bomb') {
+        osc.type = 'square';
+        // Immediate loud punch
+        osc.frequency.setValueAtTime(150, now);
+        // Fast drop to simulate impact
+        osc.frequency.exponentialRampToValueAtTime(30, now + 0.2);
+        // Slow rumble out
+        osc.frequency.exponentialRampToValueAtTime(1, now + 1.5);
+        
+        gain.gain.setValueAtTime(1, now); // start at full volume
+        // Smooth fade out over 1.5 seconds
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+        
+        osc.start(now);
+        osc.stop(now + 1.5);
+      } else if (type === 'win') {
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.05);
+        gain.gain.setValueAtTime(0.3, now + 0.6);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 1);
+
+        osc.frequency.setValueAtTime(440, now); // A4
+        osc.frequency.setValueAtTime(554.37, now + 0.15); // C#5
+        osc.frequency.setValueAtTime(659.25, now + 0.3); // E5
+        osc.frequency.setValueAtTime(880, now + 0.45); // A5
+
+        osc.start(now);
+        osc.stop(now + 1);
+      } else if (type === 'lose') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 1);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 1);
+        osc.start(now);
+        osc.stop(now + 1);
+      }
+    } catch (e) {
+      // Ignore audio errors if browser blocks it
+    }
+  };
+
   const handleSlice = (id: number) => {
     if (gameState !== 'playing') return;
-    
+
     setFruits(prev => prev.map(f => {
       if (f.id === id && !f.sliced) {
         if (f.fruitDef.isBomb) {
           // HIT A BOMB! GAME OVER
+          playSound('bomb');
           setGameState('lost');
-          setTimeout(() => onClose(), 1200);
+          setTimeout(() => onClose(), 2000);
         } else {
           // Normal fruit slice
+          playSound('slice');
           const newScore = score + 1;
           setScore(newScore);
           if (newScore >= 100) {
             setGameState('won');
-            setTimeout(() => onClose(), 1200);
+            playSound('win');
+            setTimeout(() => onClose(), 2500);
           }
         }
         return { ...f, sliced: true };
@@ -564,7 +633,7 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
 
       {/* Cross Button Top Right */}
       <div className="absolute top-8 right-8 z-50 pointer-events-auto">
-        <button 
+        <button
           onClick={onClose}
           className="w-12 h-12 rounded-full flex items-center justify-center bg-surface/20 hover:bg-red-500/10 border border-border/40 hover:border-red-500/50 text-text-secondary hover:text-red-500 transition-all duration-300 backdrop-blur-md"
         >
@@ -573,36 +642,36 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
       </div>
 
       {/* Game Over / Win Toast without background container */}
-      <div 
+      <div
         className={cn(
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] flex flex-col items-center justify-center pointer-events-none transition-all duration-500",
           gameState !== 'playing' ? "opacity-100 scale-100" : "opacity-0 scale-50"
         )}
       >
         {gameState === 'won' && (
-          <h2 
-            className="text-[80px] sm:text-[120px] md:text-[160px] font-black tracking-widest text-center leading-none" 
-            style={{ 
+          <h2
+            className="text-[80px] sm:text-[120px] md:text-[160px] font-black tracking-widest text-center leading-none"
+            style={{
               color: '#FFD700',
               fontFamily: '"Arial Black", Impact, sans-serif',
               WebkitTextStroke: '4px #ffffff',
               textShadow: '1px 1px 0 #b35900, 2px 2px 0 #b35900, 3px 3px 0 #b35900, 4px 4px 0 #b35900, 5px 5px 0 #b35900, 6px 6px 0 #b35900, 7px 7px 0 #b35900, 8px 8px 0 #b35900, 9px 9px 0 #b35900, 10px 10px 0 #ffffff, 11px 11px 0 #ffffff, 12px 12px 0 #ffffff'
             }}
           >
-            WELL<br/>PLAYED
+            WELL<br />PLAYED
           </h2>
         )}
         {gameState === 'lost' && (
-          <h2 
-            className="text-[80px] sm:text-[120px] md:text-[160px] font-black tracking-widest text-center leading-none animate-pulse" 
-            style={{ 
+          <h2
+            className="text-[80px] sm:text-[120px] md:text-[160px] font-black tracking-widest text-center leading-none animate-pulse"
+            style={{
               color: '#ff7675',
               fontFamily: '"Arial Black", Impact, sans-serif',
               WebkitTextStroke: '4px #ffffff',
               textShadow: '1px 1px 0 #d63031, 2px 2px 0 #d63031, 3px 3px 0 #d63031, 4px 4px 0 #d63031, 5px 5px 0 #d63031, 6px 6px 0 #d63031, 7px 7px 0 #d63031, 8px 8px 0 #d63031, 9px 9px 0 #d63031, 10px 10px 0 #ffffff, 11px 11px 0 #ffffff, 12px 12px 0 #ffffff'
             }}
           >
-            GAME<br/>OVER
+            GAME<br />OVER
           </h2>
         )}
       </div>
@@ -632,14 +701,14 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
               </div>
             ) : (
               <div className="relative flex justify-center items-center w-full h-full">
-                <div 
-                  className="absolute animate-[sliceLeft_1s_ease-out_forwards]" 
+                <div
+                  className="absolute animate-[sliceLeft_1s_ease-out_forwards]"
                   style={{ clipPath: 'polygon(0 0, 50% 0, 50% 100%, 0 100%)' }}
                 >
                   {fruit.fruitDef.svg}
                 </div>
-                <div 
-                  className="absolute animate-[sliceRight_1s_ease-out_forwards]" 
+                <div
+                  className="absolute animate-[sliceRight_1s_ease-out_forwards]"
                   style={{ clipPath: 'polygon(50% 0, 100% 0, 100% 100%, 50% 100%)' }}
                 >
                   {fruit.fruitDef.svg}
@@ -668,7 +737,8 @@ const FruitSlicerOverlay = ({ onClose }: { onClose: () => void }) => {
       </svg>
 
       {/* Global styles for animation */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes fallAndRotate {
           0% {
             top: -15%;
@@ -724,7 +794,7 @@ const ActivityFeed = () => {
     <Section id="activity">
       <Container className="flex flex-col gap-6">
         <SectionHeader title="Activity Feed" />
-        
+
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Row 1: Music & Instagram */}
           <SpotifyCard />
@@ -745,12 +815,12 @@ const ActivityFeed = () => {
             </div>
           </ActivityCard>
 
-          <ActivityCard 
+          <ActivityCard
             onClick={() => {
               document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            icon={Mail} 
-            label="Contact" 
+            icon={Mail}
+            label="Contact"
             className="col-span-1 min-h-[110px] justify-between group overflow-hidden relative"
           >
             <div className="line-clamp-2 mt-1 text-text-primary/80 z-10 relative">
