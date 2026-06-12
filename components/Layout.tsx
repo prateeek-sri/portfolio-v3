@@ -14,7 +14,7 @@ interface LayoutProps {
 // Main container restricting max width and handling padding
 export const Container: React.FC<LayoutProps> = ({ children, className = "", id }) => {
   return (
-    <div id={id} className={cn("w-full max-w-3xl mx-auto px-3 sm:px-6 lg:px-8", className)}>
+    <div id={id} className={cn("w-full max-w-2xl mx-auto px-3 sm:px-6 lg:px-8", className)}>
       {children}
     </div>
   );

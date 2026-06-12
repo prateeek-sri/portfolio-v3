@@ -10,7 +10,7 @@ const Stack: React.FC = () => {
       id: `${item.id}-${index}`,
       description: item.name,
       image: item.image,
-      className: `h-12 w-auto object-contain ${item.className || ''}`,
+      className: `h-14 w-auto object-contain ${item.className || ''}`,
     }))
   );
 

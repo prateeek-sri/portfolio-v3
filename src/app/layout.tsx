@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth dark">
+    <html lang="en" className="scroll-smooth dark overflow-x-hidden w-full relative">
       <head>
         {/* Inline script to prevent theme flash */}
         <script
@@ -37,7 +37,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden w-full relative">
         <Providers>{children}</Providers>
       </body>
     </html>

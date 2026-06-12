@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowLeftIcon, GithubIcon } from "@/components/Icons";
+import { ArrowRight } from 'lucide-react';
+import { ArrowLeftIcon } from "@/components/Icons";
 import { Container, SectionHeader } from "@/components/Layout";
 import { CONFIG } from "@/src/config";
 
@@ -64,7 +65,7 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
     const target = e.target as HTMLElement;
     if (target.closest('.github-link-btn')) return;
 
-    window.open(project.liveUrl || project.githubUrl || "#", "_blank", "noopener,noreferrer");
+    window.location.href = `/work/${project.slug}`;
   };
 
   return (
@@ -118,21 +119,20 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
             </svg>
           </span>
 
-          {/* Dedicated GitHub Repo Icon Link if both exist */}
-          {project.githubUrl && project.liveUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="github-link-btn p-1 text-text-muted hover:text-highlight transition-all duration-200 hover:scale-110 ml-1.5 z-30 relative"
-              title="View Source Code on GitHub"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <GithubIcon className="w-4 h-4" />
-            </a>
-          )}
         </div>
+
+
+        
         <p className="text-sm text-text-secondary pr-4 line-clamp-2 md:line-clamp-1">{project.description}</p>
+        
+        <div className="flex items-center gap-4 mt-2">
+          <span className="text-xs text-text-muted font-medium font-sans">
+            {project.year}
+          </span>
+          <span className="text-sm font-semibold text-text-muted group-hover:text-text-primary group-hover:underline underline-offset-4 transition-all duration-300 flex items-center gap-1">
+            View Details <ArrowRight size={14} className="transform group-hover:translate-x-1 transition-transform duration-300" />
+          </span>
+        </div>
       </div>
 
       {/* Right side: Color-spreading stacked tech icons */}
@@ -143,7 +143,7 @@ const ProjectRow: React.FC<{ project: Project }> = ({ project }) => {
           return (
             <div
               key={i}
-              className="relative w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center grayscale-0 opacity-100 md:grayscale md:opacity-60 md:group-hover:grayscale-0 md:group-hover:opacity-100 md:group-hover:scale-105 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className="relative w-5 h-5 sm:w-[22px] sm:h-[22px] flex items-center justify-center grayscale-0 opacity-100 md:grayscale md:opacity-60 md:group-hover:grayscale-0 md:group-hover:opacity-100 md:group-hover:scale-105 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
               style={{
                 transitionDelay: `${i * 6}ms`
               }}
@@ -178,20 +178,20 @@ const WorkPage = () => {
   const sortedYears = Object.keys(groupedProjects).sort((a, b) => b.localeCompare(a));
 
   return (
-    <Container className="min-h-screen py-16 sm:py-20 select-none relative z-10">
+    <Container className="min-h-screen pt-32 md:pt-48 pb-20 select-none relative z-10">
       <main className="max-w-screen mx-auto">
         <SectionHeader
           title="Work"
           subtitle="A complete archive of projects and software tools I have crafted."
         />
 
-        <div className="flex flex-col mt-8 group/list">
+        <div className="flex flex-col mt-8">
           {sortedYears.map((year) => (
             <div key={year} className="flex flex-col gap-3 mt-10 first:mt-4">
               <span className="text-xs font-semibold text-text-muted font-sans tracking-widest select-none opacity-80 pl-1">
                 {year}
               </span>
-              <div className="flex flex-col">
+              <div className="flex flex-col group/list">
                 {groupedProjects[year].map((p, i) => (
                   <ProjectRow key={i} project={p} />
                 ))}

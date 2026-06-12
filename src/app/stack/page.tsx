@@ -191,7 +191,7 @@ const StackPage = () => {
   };
 
   return (
-    <Container className="min-h-screen py-16 sm:py-20 select-none relative z-10">
+    <Container className="min-h-screen pt-32 md:pt-48 pb-20 select-none relative z-10">
       <main className="max-w-screen mx-auto">
         <SectionHeader
           title="Stack"
