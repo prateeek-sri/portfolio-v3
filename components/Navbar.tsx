@@ -19,9 +19,9 @@ const navItems = [
 const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false }) => {
   return (
     <nav className={`border-white/40 dark:border-border/40 bg-white/50 dark:bg-background/80 fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 rounded-2xl border shadow-lg backdrop-blur-xl transition-all duration-700 md:h-[60px] md:w-auto md:max-w-5xl md:rounded-full ${isHidden ? 'opacity-0 pointer-events-none -translate-y-8' : 'opacity-100 translate-y-0'}`}>
-      <div className="flex h-14 items-center justify-between px-4 md:gap-4 md:px-6 md:h-[60px]">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="group flex items-center gap-2.5">
+      <div className="flex h-14 items-center justify-between px-3 sm:px-4 md:gap-4 md:px-6 md:h-[60px]">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-2.5">
             {/* Profile Image Logo */}
             <div className="h-6 w-6 rounded bg-text-muted/20 transition-all duration-300 group-hover:opacity-60 overflow-hidden flex-shrink-0 border border-border/40 shadow-sm">
               <Image src="/icons/me/me.jpg" alt="Prateek" width={24} height={24} className="w-full h-full object-cover" />
@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false })
             <span className="text-base font-semibold md:text-lg">Prateek</span>
           </Link>
           {/* Nav items - visible on all screen sizes */}
-          <div className="flex items-center gap-6 md:gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             {navItems.map((item) => (
               <Link
                 key={item.label}
@@ -54,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false })
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0.5 sm:gap-2">
           {/* Command Palette Trigger */}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
