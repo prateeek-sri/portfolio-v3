@@ -7,6 +7,7 @@ import { CommandPalette } from "@/components/ui/command-palette";
 import { PageTransition } from "@/components/ui/page-transition";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Preloader from "@/components/ui/preloader";
 
 const playClickSound = () => {
   if (typeof window === 'undefined') return;
@@ -35,6 +36,18 @@ const playClickSound = () => {
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [showPreloader, setShowPreloader] = useState(true);
+
+  useEffect(() => {
+    if (showPreloader) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPreloader]);
 
   useEffect(() => {
     const handleGlobalClick = (e: MouseEvent) => {
@@ -91,7 +104,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       <ScrollProgress />
       <CommandPalette />
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      
+      <Navbar theme={theme} toggleTheme={toggleTheme} isHidden={showPreloader} />
+      
+      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
       
       <PageTransition>
         <main className="relative z-10 w-full">

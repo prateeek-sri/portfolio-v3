@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { Section, Container, SectionHeader } from './Layout';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { CONFIG } from '../src/config';
 import { GithubIcon } from './Icons';
 
@@ -178,13 +179,13 @@ const Projects: React.FC = () => {
           ))}
         </div>
         <div className="flex justify-center mt-8">
-          <Link
-            href="/work"
-            className="flex items-center gap-2 px-4 py-2 w-fit rounded-full border border-border bg-surface text-text-secondary hover:text-text-primary hover:border-text-muted/50 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group cursor-pointer"
-          >
-            <span className="text-xs sm:text-sm font-medium">Show more projects</span>
-            <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-text-primary transition-all duration-500 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
+              <Link
+                href="/work"
+                className="flex items-center gap-2 px-4 py-2 w-fit rounded-full border border-border bg-surface text-text-secondary hover:text-text-primary hover:border-text-muted/50 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group cursor-pointer"
+              >
+                <span className="text-xs sm:text-sm font-medium">Show more projects</span>
+                <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-text-primary transition-all duration-500 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
         </div>
       </Container>
     </Section>

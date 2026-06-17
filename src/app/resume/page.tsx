@@ -8,7 +8,7 @@ import { Container, SectionHeader } from "@/components/Layout";
 const ResumePage = () => {
   return (
     <Container className="min-h-screen py-16 sm:py-20 select-none relative z-10">
-      <main className="max-w-screen mx-auto">
+      <main className="w-full max-w-7xl mx-auto">
         <SectionHeader
           title="Resume"
           subtitle="My resume."

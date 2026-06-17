@@ -52,9 +52,9 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle, c
     <div className="flex flex-col gap-2">
       <h2 className="text-xl font-medium text-text-primary">
         <Link href={href || `/${title.toLowerCase()}`} >
-        <span className="underline decoration-wavy underline-offset-4 decoration-1 decoration-highlight">
-          {title}
-        </span>
+          <span className="underline decoration-wavy underline-offset-4 decoration-1 decoration-highlight">
+            {title}
+          </span>
         </Link>
         {count !== undefined && <span className="text-sm align-top ml-1 text-text-secondary">({count})</span>}
       </h2>

@@ -3,18 +3,26 @@ import { Section, Container, SectionHeader } from './Layout';
 import { ArrowUpRightIcon } from './Icons';
 import { CONFIG } from '../src/config';
 import Link from 'next/link';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 const BlogRow: React.FC<{ title: string; id: string; date: string }> = ({ title, id, date }) => (
-  <Link
-    href={`/blog/${id}`}
-    className="group flex items-center justify-between py-5 border-b border-border/40 hover:border-border transition-all duration-300 ease-out"
-  >
-    <div className="flex flex-col gap-1">
-      <span className="text-text-primary font-medium group-hover:text-highlight transition-all duration-300 ease-out">{title}</span>
-      <span className="text-xs text-text-muted">{date}</span>
-    </div>
-    <ArrowUpRightIcon className="w-4 h-4 text-text-muted group-hover:text-highlight group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]" />
-  </Link>
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Link
+        href={`/blog/${id}`}
+        className="group flex items-center justify-between py-5 border-b border-border/40 hover:border-border transition-all duration-300 ease-out"
+      >
+        <div className="flex flex-col gap-1">
+          <span className="text-text-primary font-medium group-hover:text-highlight transition-all duration-300 ease-out">{title}</span>
+          <span className="text-xs text-text-muted">{date}</span>
+        </div>
+        <ArrowUpRightIcon className="w-4 h-4 text-text-muted group-hover:text-highlight group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]" />
+      </Link>
+    </TooltipTrigger>
+    <TooltipContent>
+      <p>Read Blog</p>
+    </TooltipContent>
+  </Tooltip>
 );
 
 const Blogs: React.FC = () => {

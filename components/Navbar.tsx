@@ -2,11 +2,13 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler';
+import { Search } from 'lucide-react';
 import { CONFIG } from '../src/config';
 
 interface NavbarProps {
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  isHidden?: boolean;
 }
 
 const navItems = [
@@ -14,9 +16,9 @@ const navItems = [
   { label: 'Stack', href: '/stack' },
 ];
 
-const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
+const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false }) => {
   return (
-    <nav className="border-white/40 dark:border-border/40 bg-white/50 dark:bg-background/80 fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 rounded-2xl border shadow-lg backdrop-blur-xl transition-all duration-300 md:h-[60px] md:w-auto md:max-w-5xl md:rounded-full">
+    <nav className={`border-white/40 dark:border-border/40 bg-white/50 dark:bg-background/80 fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 rounded-2xl border shadow-lg backdrop-blur-xl transition-all duration-700 md:h-[60px] md:w-auto md:max-w-5xl md:rounded-full ${isHidden ? 'opacity-0 pointer-events-none -translate-y-8' : 'opacity-100 translate-y-0'}`}>
       <div className="flex h-14 items-center justify-between px-4 md:gap-4 md:px-6 md:h-[60px]">
         <div className="flex items-center gap-6">
           <Link href="/" className="group flex items-center gap-2.5">
@@ -52,8 +54,25 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:ml-18">
-          {/* Theme toggler replacing search trigger */}
+        <div className="flex items-center gap-2">
+          {/* Command Palette Trigger */}
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+            className="flex items-center gap-1.5 p-1.5 sm:px-2 sm:py-1 text-text-muted hover:text-text-primary bg-transparent sm:bg-secondary/10 sm:hover:bg-secondary/40 border-transparent sm:border sm:border-border/30 sm:hover:border-border/60 rounded-full transition-colors group"
+            aria-label="Open command palette"
+          >
+            <Search className="w-[18px] h-[18px] sm:w-3.5 sm:h-3.5 ml-0.5" />
+            <div className="hidden sm:flex items-center gap-1 mr-0.5">
+              <kbd className="px-1 py-0 text-[10px] font-mono font-medium text-text-muted group-hover:text-text-primary bg-background border border-border/40 rounded-[4px] shadow-sm transition-colors">
+                Ctrl
+              </kbd>
+              <kbd className="px-1 py-0 text-[10px] font-mono font-medium text-text-muted group-hover:text-text-primary bg-background border border-border/40 rounded-[4px] shadow-sm transition-colors">
+                K
+              </kbd>
+            </div>
+          </button>
+
+          {/* Theme toggler */}
           <div className="flex items-center">
             <AnimatedThemeToggler />
           </div>

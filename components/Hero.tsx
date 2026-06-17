@@ -5,6 +5,7 @@ import { Section, Container } from './Layout';
 import { ArrowUpRightIcon } from './Icons';
 import { CONFIG } from '../src/config';
 import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 // Dynamic Inline Badge with a magnetic circle cursor hover effect that tracks mouse position
 const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; invertOnHover?: boolean }> = ({ text, icon, emoji, invertOnHover }) => {
@@ -153,28 +154,34 @@ const Hero: React.FC = () => {
               {socialLinks.map((item, idx) => {
                 const Icon = item.icon;
                 return (
-                  <a
-                    key={item.name}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-text-secondary hover:text-black dark:hover:text-white transition-all duration-300 ease-out relative group p-1 flex items-center justify-center"
-                    aria-label={item.name}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <div className="absolute left-0 -bottom-[4px] h-[4px] w-0 group-hover:w-full transition-all duration-300 ease-out pointer-events-none overflow-hidden">
-                      <div className="w-[100px] h-full">
-                        <svg width="100%" height="100%">
-                          <defs>
-                            <pattern id={`zigzag-social-${idx}`} x="0" y="0" width="12" height="4" patternUnits="userSpaceOnUse">
-                              <path d="M0 2 L3 0 L9 4 L12 2" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-                            </pattern>
-                          </defs>
-                          <rect x="0" y="0" width="100%" height="100%" fill={`url(#zigzag-social-${idx})`} />
-                        </svg>
-                      </div>
-                    </div>
-                  </a>
+                  <Tooltip key={item.name}>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-text-secondary hover:text-black dark:hover:text-white transition-all duration-300 ease-out relative group p-1 flex items-center justify-center"
+                        aria-label={item.name}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <div className="absolute left-0 -bottom-[4px] h-[4px] w-0 group-hover:w-full transition-all duration-300 ease-out pointer-events-none overflow-hidden">
+                          <div className="w-[100px] h-full">
+                            <svg width="100%" height="100%">
+                              <defs>
+                                <pattern id={`zigzag-social-${idx}`} x="0" y="0" width="12" height="4" patternUnits="userSpaceOnUse">
+                                  <path d="M0 2 L3 0 L9 4 L12 2" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                                </pattern>
+                              </defs>
+                              <rect x="0" y="0" width="100%" height="100%" fill={`url(#zigzag-social-${idx})`} />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{item.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 );
               })}
             </div>
