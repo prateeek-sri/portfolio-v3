@@ -213,7 +213,7 @@ export const CONFIG: PortfolioConfig = {
             ],
             tags: ["Express", "TypeScript", "Next.js", "Node.js", "MongoDB", "Tailwind"],
             image: "work/jobify.png",
-            liveUrl: "https://jobify-nu-ecru.vercel.app/",
+            liveUrl: "https://jobifysearch.vercel.app/",
             githubUrl: "https://github.com/prateeek-sri/jobify",
             year: "2026",
         },
