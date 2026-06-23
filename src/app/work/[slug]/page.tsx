@@ -49,7 +49,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const nextProject = projectIndex < CONFIG.projects.length - 1 ? CONFIG.projects[projectIndex + 1] : null;
 
   return (
-    <main className="min-h-screen text-text-primary pt-32 pb-20 px-3 sm:px-6 lg:px-8 max-w-2xl mx-auto flex flex-col gap-12 font-sans">
+    <main className="min-h-screen text-text-primary pt-56 md:pt-72 pb-20 px-3 sm:px-6 lg:px-8 max-w-2xl mx-auto flex flex-col gap-12 font-sans">
       
       {/* Header */}
       <header className="flex flex-col gap-4">

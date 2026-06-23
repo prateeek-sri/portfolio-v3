@@ -290,7 +290,7 @@ export const CONFIG: PortfolioConfig = {
             ],
             tags: ["React", "TypeScript", "Tailwind","Python"],
             image: "work/agrinova.png",
-            liveUrl: "https://sih-agro-prototype.vercel.app/",
+            liveUrl: "https://krishimitrahelp.vercel.app/",
             githubUrl: "https://github.com/prateeek-sri/SIH-Agro-Prototype",
             year: "2025",
         },

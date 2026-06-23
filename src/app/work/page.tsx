@@ -178,12 +178,22 @@ const WorkPage = () => {
   const sortedYears = Object.keys(groupedProjects).sort((a, b) => b.localeCompare(a));
 
   return (
-    <Container className="min-h-screen pt-32 md:pt-48 pb-20 select-none relative z-10">
-      <main className="w-full max-w-7xl mx-auto">
-        <SectionHeader
-          title="Work"
-          subtitle="A complete archive of projects and software tools I have crafted."
-        />
+    <div className="relative">
+      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="w-full shadow-sm">
+          <img 
+            src="/icons/gif2.gif" 
+            alt="Work header animation" 
+            className="w-full h-auto max-h-[96px] md:max-h-[120px] object-cover" 
+          />
+        </div>
+      </div>
+      <Container className="min-h-screen pt-36 md:pt-44 pb-20 select-none relative z-10">
+        <main className="w-full max-w-7xl mx-auto">
+          <SectionHeader
+            title="Work"
+            subtitle="A complete archive of projects and software tools I have crafted."
+          />
 
         <div className="flex flex-col mt-8">
           {sortedYears.map((year) => (
@@ -211,6 +221,7 @@ const WorkPage = () => {
         </div>
       </main>
     </Container>
+    </div>
   );
 };
 

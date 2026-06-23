@@ -191,8 +191,18 @@ const StackPage = () => {
   };
 
   return (
-    <Container className="min-h-screen pt-32 md:pt-48 pb-20 select-none relative z-10">
-      <main className="w-full max-w-7xl mx-auto">
+    <div className="relative">
+      <div className="w-full max-w-2xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="w-full shadow-sm">
+          <img 
+            src="/icons/gif1.gif" 
+            alt="Stack header animation" 
+            className="w-full h-auto max-h-[96px] md:max-h-[120px] object-cover" 
+          />
+        </div>
+      </div>
+      <Container className="min-h-screen pt-36 md:pt-44 pb-20 select-none relative z-10">
+        <main className="w-full max-w-7xl mx-auto">
         <SectionHeader
           title="Stack"
           subtitle="Just like any other dev, I also spend more time searching and experimenting tools than actually coding some sensible things."
@@ -251,6 +261,7 @@ const StackPage = () => {
         </div>
       </main>
     </Container>
+    </div>
   );
 };
 

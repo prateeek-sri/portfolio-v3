@@ -17,7 +17,7 @@ const Divider = () => (
 export default function HomePage() {
   return (
     <>
-      <main className="flex flex-col pt-32 md:pt-48 pb-0 gap-10 md:gap-14 relative z-10">
+      <main className="flex flex-col pt-56 md:pt-72 pb-0 gap-10 md:gap-14 relative z-10">
         <Hero />
         <Divider />
         <ActivityFeed />
