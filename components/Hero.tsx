@@ -114,7 +114,7 @@ const Hero: React.FC = () => {
     },
     {
       name: 'LeetCode',
-      url: social.leetcode || 'https://leetcode.com/u/sri_prateek/',
+      url: 'https://leetcode.com/u/sri_prateek/',
       icon: '/icons/leetcode-original.svg',
       imgClass: 'w-[20px] h-[20px] sm:w-[18px] sm:h-[18px] object-contain',
     },
