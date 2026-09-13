@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { AnimatedThemeToggler } from './ui/animated-theme-toggler';
 import { Search } from 'lucide-react';
 import { CONFIG } from '../src/config';
@@ -19,19 +20,57 @@ const navItems = [
 ];
 
 const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+  // Track whether we've scrolled past the hero banner
+  const [scrolledPastBanner, setScrolledPastBanner] = useState(!isHomePage);
+  // The CSS top value (px) to apply while banner is in view
+  const [navTopPx, setNavTopPx] = useState<number>(32);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    if (!isHomePage) {
+      setScrolledPastBanner(true);
+      setNavTopPx(32);
+      return;
+    }
+
+    const compute = () => {
+      const banner = document.getElementById('hero-banner');
+      if (banner) {
+        const rect = banner.getBoundingClientRect();
+        const absBottom = rect.bottom + window.scrollY; // distance from page top
+        const past = window.scrollY + 48 > absBottom;
+        setScrolledPastBanner(past);
+        if (!past) {
+          // Position navbar just below the banner's current viewport bottom
+          setNavTopPx(Math.round(rect.bottom) + 20);
+        } else {
+          setNavTopPx(32);
+        }
+      } else {
+        setScrolledPastBanner(false);
+        setNavTopPx(32);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    compute();
+    window.addEventListener('scroll', compute, { passive: true });
+    window.addEventListener('resize', compute);
+    return () => {
+      window.removeEventListener('scroll', compute);
+      window.removeEventListener('resize', compute);
+    };
+  }, [isHomePage]);
+
+  const navStyle: React.CSSProperties = { top: `${navTopPx}px` };
+
 
   return (
-    <nav className={`border-white/40 dark:border-border/40 bg-white/50 dark:bg-background/80 fixed ${isScrolled ? 'top-6' : 'top-32 md:top-36'} left-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 rounded-2xl border shadow-lg backdrop-blur-xl transition-all duration-700 md:h-[60px] md:w-auto md:max-w-5xl md:rounded-full ${isHidden ? 'opacity-0 pointer-events-none -translate-y-8' : 'opacity-100 translate-y-0'}`}>
+    <nav
+      style={navStyle}
+      className={`border-white/40 dark:border-white/10 bg-white/70 dark:bg-black/70 fixed left-1/2 z-50 w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 rounded-2xl border shadow-lg backdrop-blur-xl transition-[top] duration-500 ease-out md:h-[60px] md:w-auto md:max-w-5xl md:rounded-full ${isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+    >
       <div className="flex h-14 items-center justify-between px-3 sm:px-4 md:gap-4 md:px-6 md:h-[60px]">
         <div className="flex items-center gap-4 sm:gap-6">
           <Link href="/" className="group flex items-center gap-2 sm:gap-2.5">
@@ -41,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme, isHidden = false })
             </div>
             <span className="text-base font-semibold md:text-lg">Prateek</span>
           </Link>
-          {/* Nav items - visible on all screen sizes */}
+          {/* Nav items */}
           <div className="flex items-center gap-4 sm:gap-6">
             {navItems.map((item) => (
               <Link

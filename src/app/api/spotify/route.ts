@@ -12,7 +12,10 @@ export async function GET() {
       return NextResponse.json({ isPlaying: false });
     }
 
-    const LASTFM_ENDPOINT = `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=1`;
+    // Fetch 2 tracks: when actively playing, Last.fm puts the live track at [0]
+    // (with @attr.nowplaying='true') AND the last scrobbled at [1].
+    // With limit=1, the live track can displace the actual last scrobble.
+    const LASTFM_ENDPOINT = `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=${apiKey}&format=json&limit=2`;
 
     const response = await fetch(LASTFM_ENDPOINT, { cache: 'no-store' });
     const data = await response.json();
@@ -21,11 +24,20 @@ export async function GET() {
       return NextResponse.json({ isPlaying: false });
     }
 
-    const track = data.recenttracks.track[0];
-    
-    // Check if the song is actively playing right now
-    const isPlaying = track['@attr']?.nowplaying === 'true';
-    
+    const tracks: any[] = Array.isArray(data.recenttracks.track)
+      ? data.recenttracks.track
+      : [data.recenttracks.track];
+
+    // First track is nowplaying (if active); use it for isPlaying state.
+    const firstTrack = tracks[0];
+    const isPlaying = firstTrack['@attr']?.nowplaying === 'true';
+
+    // For display: if actively playing use [0], otherwise skip nowplaying entries
+    // and take the first completed scrobble so we always show the real last played.
+    const track = isPlaying
+      ? firstTrack
+      : tracks.find((t: any) => !t['@attr']?.nowplaying) ?? firstTrack;
+
     const title = track.name;
     const artist = track.artist['#text'];
     const album = track.album['#text'];

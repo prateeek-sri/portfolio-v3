@@ -32,8 +32,8 @@ export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ childr
         key={key}
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ 
-          duration: 0.75, 
+        transition={{
+          duration: 0.75,
           ease: [0.16, 1, 0.3, 1] // Luxurious custom ease-out-expo curve
         }}
       >

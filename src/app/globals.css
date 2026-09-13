@@ -63,11 +63,11 @@
 }
 
 :root.dark {
-  /* Dark Mode Overrides */
-  --background: 10 10 10;
+  /* Dark Mode Overrides - Pure Plain Black */
+  --background: 0 0 0;
   --foreground: 245 245 245;
-  --surface: 23 23 23;
-  --border: 38 38 38;
+  --surface: 12 12 12;
+  --border: 28 28 28;
   --text-primary: 245 245 245;
   --text-secondary: 163 163 163;
   --text-muted: 82 82 82;
@@ -76,6 +76,9 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {

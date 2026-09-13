@@ -7,7 +7,7 @@ import { Container, SectionHeader } from "@/components/Layout";
 
 const ResumePage = () => {
   return (
-    <Container className="min-h-screen pt-56 md:pt-72 pb-20 select-none relative z-10">
+    <Container className="min-h-screen pt-32 md:pt-48 pb-20 select-none relative z-10">
       <main className="w-full max-w-7xl mx-auto">
         <SectionHeader
           title="Resume"

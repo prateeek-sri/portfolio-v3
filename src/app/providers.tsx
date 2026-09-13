@@ -7,7 +7,6 @@ import { CommandPalette } from "@/components/ui/command-palette";
 import { PageTransition } from "@/components/ui/page-transition";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Preloader from "@/components/ui/preloader";
 
 const playClickSound = () => {
   if (typeof window === 'undefined') return;
@@ -15,17 +14,17 @@ const playClickSound = () => {
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    
+
     osc.type = 'sine';
     osc.frequency.setValueAtTime(1000, ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.06);
-    
+
     gain.gain.setValueAtTime(0.04, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-    
+
     osc.connect(gain);
     gain.connect(ctx.destination);
-    
+
     osc.start();
     osc.stop(ctx.currentTime + 0.06);
   } catch (e) {
@@ -53,7 +52,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     const handleGlobalClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const interactive = target.closest('a, button, [role="button"], input, select, textarea, [onClick], .cursor-pointer');
-      
+
       if (interactive) {
         // Skip theme toggler button to avoid overlapping chime sound
         if (interactive.closest('.theme-toggler-btn') || interactive.getAttribute('aria-label') === 'Switch theme') {
@@ -104,11 +103,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
       <ScrollProgress />
       <CommandPalette />
-      
-      <Navbar theme={theme} toggleTheme={toggleTheme} isHidden={showPreloader} />
-      
-      {showPreloader && <Preloader onComplete={() => setShowPreloader(false)} />}
-      
+
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
+
+
       <PageTransition>
         <main className="relative z-10 w-full">
           {children}

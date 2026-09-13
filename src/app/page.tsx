@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Hero from "@/components/Hero";
+import HeroBanner from "@/components/HeroBanner";
 import Stack from "@/components/Stack";
 import Projects from "@/components/Projects";
 import ActivityFeed from "@/components/ActivityFeed";
@@ -17,7 +18,12 @@ const Divider = () => (
 export default function HomePage() {
   return (
     <>
-      <main className="flex flex-col pt-56 md:pt-72 pb-0 gap-10 md:gap-14 relative z-10">
+      {/* Hero banner sits at very top of page, navbar anchors below it */}
+      <div className="pt-8 pb-0">
+        <HeroBanner />
+      </div>
+
+      <main className="flex flex-col pt-28 pb-0 gap-10 md:gap-14 relative z-10">
         <Hero />
         <Divider />
         <ActivityFeed />

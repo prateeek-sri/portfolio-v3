@@ -4,8 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Section, Container } from './Layout';
 import { ArrowUpRightIcon } from './Icons';
 import { CONFIG } from '../src/config';
-import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
 // Dynamic Inline Badge with a magnetic circle cursor hover effect that tracks mouse position
 const InlineBadge: React.FC<{ text: string; icon?: string; emoji?: string; invertOnHover?: boolean }> = ({ text, icon, emoji, invertOnHover }) => {
@@ -100,10 +99,31 @@ const Hero: React.FC = () => {
   const [animationState, setAnimationState] = useState<'visible' | 'exiting' | 'entering'>('visible');
 
   const socialLinks = [
-    { name: 'Github', url: social.github, icon: Github },
-    { name: 'Linkedin', url: social.linkedin, icon: Linkedin },
-    { name: 'Instagram', url: social.instagram, icon: Instagram },
-    { name: 'Email', url: `https://mail.google.com/mail/?view=cm&fs=1&to=${social.email}`, icon: Mail },
+    {
+      name: 'LinkedIn',
+      url: social.linkedin,
+      icon: '/icons/linkedin-org.svg',
+      imgClass: 'w-[20px] h-[20px] sm:w-[18px] sm:h-[18px] rounded-[3px] object-cover',
+    },
+    {
+      name: 'GitHub',
+      url: social.github,
+      icon: '/icons/github-light.svg',
+      darkIcon: '/icons/github-dark.svg',
+      imgClass: 'w-[20px] h-[20px] sm:w-[18px] sm:h-[18px] object-contain',
+    },
+    {
+      name: 'LeetCode',
+      url: social.leetcode || 'https://leetcode.com/u/sri_prateek/',
+      icon: '/icons/leetcode-original.svg',
+      imgClass: 'w-[20px] h-[20px] sm:w-[18px] sm:h-[18px] object-contain',
+    },
+    {
+      name: 'Instagram',
+      url: social.instagram,
+      icon: '/icons/insta.svg',
+      imgClass: 'w-[20px] h-[20px] sm:w-[18px] sm:h-[18px] rounded-[4px] object-cover',
+    },
   ];
 
   useEffect(() => {
@@ -124,7 +144,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">
-              <h1 className="text-5xl md:text-6xl font-display font-medium text-text-primary tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-medium text-text-primary tracking-tight">
                 {name}
               </h1>
             </div>
@@ -149,44 +169,46 @@ const Hero: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 gap-6 sm:gap-0">
-            <div className="flex items-center gap-6">
-              {socialLinks.map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <Tooltip key={item.name}>
-                    <TooltipTrigger asChild>
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-text-secondary hover:text-black dark:hover:text-white transition-all duration-300 ease-out relative group p-1 flex items-center justify-center"
-                        aria-label={item.name}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <div className="absolute left-0 -bottom-[4px] h-[4px] w-0 group-hover:w-full transition-all duration-300 ease-out pointer-events-none overflow-hidden">
-                          <div className="w-[100px] h-full">
-                            <svg width="100%" height="100%">
-                              <defs>
-                                <pattern id={`zigzag-social-${idx}`} x="0" y="0" width="12" height="4" patternUnits="userSpaceOnUse">
-                                  <path d="M0 2 L3 0 L9 4 L12 2" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-                                </pattern>
-                              </defs>
-                              <rect x="0" y="0" width="100%" height="100%" fill={`url(#zigzag-social-${idx})`} />
-                            </svg>
-                          </div>
-                        </div>
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              })}
+          <div className="flex items-center mt-2">
+            <div className="inline-flex items-center gap-5 sm:gap-5 px-5 sm:px-5 py-2.5 sm:py-2.5 rounded-full border border-border/50 dark:border-white/15 bg-surface/40 dark:bg-white/[0.04] backdrop-blur-md shadow-sm">
+              {socialLinks.map((item) => (
+                <Tooltip key={item.name}>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="transition-transform duration-200 hover:scale-115 active:scale-95 flex items-center justify-center select-none"
+                      aria-label={item.name}
+                    >
+                      {item.darkIcon ? (
+                        <>
+                          <img
+                            src={item.icon}
+                            alt={item.name}
+                            className={`${item.imgClass} dark:hidden block`}
+                          />
+                          <img
+                            src={item.darkIcon}
+                            alt={item.name}
+                            className={`${item.imgClass} hidden dark:block`}
+                          />
+                        </>
+                      ) : (
+                        <img
+                          src={item.icon}
+                          alt={item.name}
+                          className={item.imgClass}
+                        />
+                      )}
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{item.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
             </div>
-
-
           </div>
         </div>
       </Container>
